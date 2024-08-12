@@ -7,7 +7,7 @@ import (
 	"github.com/benodiwal/server/internal/utils"
 )
 
-func HandleSineConnections(w http.ResponseWriter, r *http.Request) {
+func HandleCosineConnections(w http.ResponseWriter, r *http.Request) {
 	ws, err := utils.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Fatal(err)
