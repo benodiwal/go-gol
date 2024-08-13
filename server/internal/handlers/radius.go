@@ -19,11 +19,9 @@ func HandleRadiusUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	utils.Mutex.Lock()
-
 	utils.R = payload.Radius
 	fmt.Fprintf(w, "Radius updated to : %f", utils.R)
-
-	defer utils.Mutex.Unlock()
+	utils.Mutex.Unlock()
 
 	w.WriteHeader(http.StatusOK)
 }

@@ -6,7 +6,6 @@ import (
 
 	"github.com/benodiwal/server/internal/env"
 	"github.com/benodiwal/server/internal/routes"
-	"github.com/benodiwal/server/internal/routines"
 )
 
 func Run() {
@@ -14,7 +13,6 @@ func Run() {
 
 	router := routes.New()
 	router.RegisterRoutes()
-	routines.Register()
 
 	port := ":" + env.Read(env.PORT)
 	log.Printf("Server starting on %s", port)

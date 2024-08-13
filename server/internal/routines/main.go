@@ -11,9 +11,10 @@ func startRoutine(r Routine) {
 func Register() {
 	sineRoutine := SineRoutine {}
 	cosineRoutine := CosineRoutine {}
+	connectionRoutine := ConnectionRoutine {}
 	messageRoutine := MessageRoutine {}
 
-	routines := []Routine {sineRoutine, cosineRoutine, messageRoutine}
+	routines := []Routine {sineRoutine, cosineRoutine, connectionRoutine, messageRoutine}
 	for _, r := range routines {
 		startRoutine(r)
 	}
