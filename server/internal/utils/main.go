@@ -9,7 +9,7 @@ import (
 
 var (
 	Clients = make(map[*websocket.Conn]bool)
-	Broadcast = make(chan string)
+	Broadcast = make(chan Message)
 	Upgrader = websocket.Upgrader {
 		CheckOrigin: func(r *http.Request) bool {
 			return true
