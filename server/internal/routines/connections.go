@@ -9,7 +9,7 @@ import (
 type ConnectionRoutine struct {}
 
 func (c ConnectionRoutine) Run() {
-	ticker := time.NewTicker(100 * time.Second)
+	ticker := time.NewTicker(100 * time.Millisecond)
 	defer ticker.Stop()
 
 	for range ticker.C {
