@@ -1,34 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef, useState } from "react"
+import { Message } from "./types";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [sessions, setSessions] = useState<number>(0);
+  const [sineValue, setSineValue] = useState<number>(0);
+  const [cosineValue, setCosineValue] = useState<number>(0);
+  const [radius, setRadius] = useState<number>(1);
+  const ws = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    ws.current = new WebSocket('ws://localhost:8000/ws');
+    ws.current.onopen = () => {
+      console.log('Connected to WebSocket');
+    }
+
+    ws.current.onmessage = (event) => {
+      const msg = JSON.parse(event.data) as unknown as Message;
+     
+      switch (msg.type) {
+        case 'sine':
+          setSineValue(msg.value);
+          break;
+        case 'cosine':
+          setCosineValue(msg.value);
+          break;
+        case 'sessions':
+          setSessions(msg.value);
+          break;
+        case 'radius':
+          setRadius(msg.value);
+          break;
+        default:
+          console.warn("Unknown message type: ", msg.type);
+      }
+    }
+
+    return () => {
+      if (ws.current) {
+        ws.current.close();
+      }
+    };
+
+  }, []);
+
+  const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newRadius = parseFloat(e.target.value);
+    sendRadius(newRadius);
+    setRadius(newRadius);
+  }
+
+  const sendRadius = async (radius: number) => {
+    if (ws.current) {
+      ws.current.send(JSON.stringify(radius));
+    }
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <p>Active Sessions: {sessions}</p>
+      <p>Sine Value: {sineValue}</p>
+      <p>Cosine Value: {cosineValue}</p>
+      <p>Radius: {radius}</p>
+      <input type="number"  value={radius} onChange={handleRadiusChange}/>
+      Hi there!!
+    </div>
   )
 }
 

@@ -2,7 +2,6 @@ package routines
 
 import (
 	"math"
-	"time"
 
 	"github.com/benodiwal/server/internal/utils"
 )
@@ -10,12 +9,8 @@ import (
 type CosineRoutine struct {}
 
 func (c CosineRoutine) Run() {
-	ticker := time.NewTicker(100 * time.Millisecond)
-	defer ticker.Stop()
-
-	for range ticker.C {
-		t := float64(time.Now().UnixNano()) / 1e9
-		value := math.Cos(t)
+	for range utils.Angle {
+		value := math.Cos(<-utils.Angle)
 		
 		utils.Mutex.Lock()
 		scaledValue := utils.R*value

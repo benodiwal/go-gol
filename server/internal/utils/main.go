@@ -17,6 +17,7 @@ var (
 	}
 	Mutex sync.Mutex
 	R = 1.0
+	Angle = make(chan float64)
 )
 
 type Message struct {
