@@ -13,8 +13,9 @@ func Register() {
 	cosineRoutine := CosineRoutine {}
 	connectionRoutine := ConnectionRoutine {}
 	messageRoutine := MessageRoutine {}
+	angleRoutine := AngleRoutine {}
 
-	routines := []Routine {sineRoutine, cosineRoutine, connectionRoutine, messageRoutine}
+	routines := []Routine {sineRoutine, cosineRoutine, connectionRoutine, messageRoutine, angleRoutine}
 	for _, r := range routines {
 		startRoutine(r)
 	}
