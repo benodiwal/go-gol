@@ -3,7 +3,6 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/benodiwal/server/internal/routines"
 	"github.com/benodiwal/server/internal/utils"
@@ -19,11 +18,22 @@ func HandleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 	utils.Mutex.Lock()
 	utils.Clients[ws] = true
+	ws.WriteJSON(utils.Message { Type: "radius", Value: utils.R })
 	utils.Mutex.Unlock()
 
 	routines.Register()
 
 	for {
-		time.Sleep(10*time.Second)
+		var newRadius float64
+		err := ws.ReadJSON(&newRadius)
+		if err != nil {
+			log.Println("Error reading from WebSocket: ", err)
+			break
+		}
+
+		utils.Mutex.Lock()
+		utils.R = newRadius
+		utils.Broadcast <- utils.Message{Type: "radius", Value: utils.R} 
+		utils.Mutex.Unlock()
 	}
 }
